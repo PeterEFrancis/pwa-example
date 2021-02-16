@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>PWA Example</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="This is an example PWA">
+
+    <link rel="manifest" href="/manifest.json">
+
+    <link rel="apple-touch-icon" href="img/logo.png">
+    <link rel="shortcut icon" type="image/png" href="img/logo.png">
+    <meta name="theme-color" content="lightgrey">
+
+    <link rel="stylesheet noreferrer" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <script>
+      window.addEventListener("load", () => {
+        // service worker
+        if ("serviceWorker" in navigator) {
+          navigator.serviceWorker.register("service-worker.js");
+        }
+      });
+    </script>
+
+    <style>
+
+      body {
+        min-width: 150px;
+        background-color: #3F3F3F;
+        color: lightgrey;
+      }
+
+      canvas {
+        width: 100%;
+        background-color: white;
+        user-select: none; /* this is important so souble clicks don't highlight other text */
+      }
+
+      p {
+        font-size: 12pt;
+      }
+
+      img#logo {
+        width: 100px;
+        margin-bottom: 20px;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+          <h1 class="text-center" style="margin-bottom:20px;">PWA Example</h1>
+          <img id="logo" alt="logo" src="img/logo.png" class="img-responsive center-block"/>
+          <canvas id="canvas" class="center-block" width="1000" height="1000" style="margin-bottom: 20px;">
+            HTML Canvas element is not supported on your device and/or borwser.
+          </canvas>
+          <div class="text-center" style="margin-bottom: 40px;">
+            <button class="btn btn-lg btn-block btn-primary"  onclick="clear_screen()">Clear</button>
+          </div>
+          <p class="text-center" style="margin-top:40px;">
+            Copyright &#169; 2021 | <a rel="noreferrer" href="https://PeterEFrancis.com" target="_blank" style="color:lightgrey;"><u>Peter E. Francis</u></a>
+          </p>
+        </div>
+        <div class="col-md-3"></div>
+      </div>
+    </div>
+  </body>
+  <script>
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
+
+    function clear_screen() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+    }
+
+    function draw_circle(x, y) {
+      ctx.fillStyle = "#" + Math.floor(Math.random()*16777215).toString(16);
+      ctx.beginPath();
+      ctx.arc(x, y, (Math.random() + 1) * 50, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.stroke();
+    }
+
+
+    canvas.addEventListener('click', function(event) {
+      let rect = canvas.getBoundingClientRect();
+      let user_x = (event.clientX - rect.left) * (canvas.width / canvas.clientWidth);
+      let user_y = (event.clientY - rect.top) * (canvas.height / canvas.clientHeight);
+      draw_circle(user_x, user_y);
+    });
+
+
+
+
+
+  </script>
+</html>
